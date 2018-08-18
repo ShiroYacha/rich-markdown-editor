@@ -13,6 +13,7 @@ import {
   OrderedListIcon,
   HorizontalRuleIcon,
   TodoListIcon,
+  TableIcon,
 } from "outline-icons";
 import getDataTransferFiles from "../../lib/getDataTransferFiles";
 import Flex from "../Flex";
@@ -21,6 +22,9 @@ import type { SlateNodeProps } from "../../types";
 import { fadeIn } from "../../animations";
 import { splitAndInsertBlock, insertImageFile } from "../../changes";
 import ToolbarButton from "./ToolbarButton";
+
+import { Block } from 'slate'
+import { editTable } from "../../plugins"
 
 type Props = SlateNodeProps & {
   theme: Object,
@@ -89,6 +93,29 @@ class BlockToolbar extends React.Component<Props> {
     });
   };
 
+  insertTable = () => {
+    const { editor } = this.props;
+
+    const rawTableJson = editTable.utils.createTable(2, 2).toJSON();
+
+    // hack: make the first row nodes "table-head"
+    rawTableJson.nodes[0].nodes.forEach(tableCell => {
+      tableCell.type = "table-head";
+      tableCell.nodes = [];
+    });
+    const table = Block.fromJSON(rawTableJson);
+
+    editor.change(change => {
+        change
+          .collapseToEndOf(this.props.node)
+          .insertBlock(table)
+          .removeNodeByKey(this.props.node.key)
+          .collapseToEnd();
+
+        return change.focus();
+    });
+  }
+
   handleClickBlock = (ev: SyntheticEvent<*>, type: string) => {
     ev.preventDefault();
 
@@ -122,6 +149,8 @@ class BlockToolbar extends React.Component<Props> {
         });
       case "image":
         return this.onPickImage();
+      case "table":
+        return this.insertTable()
       default:
     }
   };
@@ -175,6 +204,7 @@ class BlockToolbar extends React.Component<Props> {
         {this.renderBlockButton("code", CodeIcon)}
         {this.renderBlockButton("horizontal-rule", HorizontalRuleIcon)}
         {hasImageUpload && this.renderBlockButton("image", ImageIcon)}
+        {this.renderBlockButton("table", TableIcon)}
       </Bar>
     );
   }

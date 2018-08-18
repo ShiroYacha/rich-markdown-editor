@@ -6,11 +6,22 @@ import TrailingBlock from "slate-trailing-block";
 import EditCode from "slate-edit-code";
 import Prism from "slate-prism";
 import EditList from "./plugins/EditList";
+import EditTable from "slate-edit-table";
 import KeyboardShortcuts from "./plugins/KeyboardShortcuts";
 import MarkdownShortcuts from "./plugins/MarkdownShortcuts";
 import MarkdownPaste from "./plugins/MarkdownPaste";
 import Ellipsis from "./plugins/Ellipsis";
 import { insertImageFile } from "./changes";
+
+export const editTable = EditTable({
+  typeTable: 'table',
+  typeRow: 'table-row',
+  typeCell: 'table-cell',
+  typeContent: 'paragraph'
+});
+
+delete editTable.schema;
+delete editTable.validateNode;
 
 const createPlugins = () => {
   return [
@@ -25,6 +36,7 @@ const createPlugins = () => {
       },
     }),
     EditList,
+    editTable,
     EditCode({
       containerType: "code",
       lineType: "code-line",

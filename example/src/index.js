@@ -25,6 +25,11 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
     this.setState({ dark: !this.state.dark });
   };
 
+  handleChange = text => {
+    localStorage.setItem("saved", text);
+    console.log(text);
+  }
+
   render() {
     return (
       <div style={{ marginTop: "60px" }}>
@@ -41,7 +46,7 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
           defaultValue={defaultValue}
           onSave={options => console.log("Save triggered", options)}
           onCancel={() => console.log("Cancel triggered")}
-          onChange={text => localStorage.setItem("saved", text)}
+          onChange={this.handleChange}
           onClickLink={href => console.log("Clicked link: ", href)}
           onShowToast={message => window.alert(message)}
           onSearchLink={async term => {
