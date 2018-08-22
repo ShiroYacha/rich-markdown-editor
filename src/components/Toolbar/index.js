@@ -4,7 +4,7 @@ import { Portal } from "react-portal";
 import { Editor, findDOMNode } from "slate-react";
 import { Node, Value } from "slate";
 import styled from "styled-components";
-import { isEqual } from "lodash";
+import { isEqual, debounce } from "lodash";
 import FormattingToolbar from "./FormattingToolbar";
 import LinkToolbar from "./LinkToolbar";
 
@@ -59,7 +59,7 @@ export default class Toolbar extends React.Component<Props, State> {
   };
 
   componentDidUpdate = () => {
-    this.update();
+    debounce(this.update, 200);
   };
 
   hideLinkToolbar = () => {
