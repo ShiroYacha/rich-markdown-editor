@@ -100,7 +100,8 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   componentWillReceiveProps(nextProps: Props) {
     if (
       nextProps.schema !== this.props.schema ||
-      nextProps.valueOverride !== this.props.valueOverride
+      (nextProps.valueOverride !== undefined &&
+        nextProps.valueOverride !== this.props.valueOverride)
     ) {
       this.setState({
         schema: {
