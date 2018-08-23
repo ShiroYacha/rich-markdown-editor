@@ -25,6 +25,7 @@ export const Placeholder = InternalPlaceholder;
 
 type Props = {
   defaultValue: string,
+  valueOverride?: string,
   placeholder: string,
   pretitle?: string,
   plugins?: Plugin[],
@@ -97,12 +98,16 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.schema !== this.props.schema) {
+    if (
+      nextProps.schema !== this.props.schema ||
+      nextProps.valueOverride !== this.props.valueOverride
+    ) {
       this.setState({
         schema: {
           ...defaultSchema,
           ...nextProps.schema,
         },
+        editorValue: Markdown.deserialize(nextProps.valueOverride),
       });
     }
   }
