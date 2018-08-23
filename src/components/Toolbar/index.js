@@ -59,7 +59,7 @@ export default class Toolbar extends React.Component<Props, State> {
   };
 
   componentDidUpdate = () => {
-    debounce(this.update, 200);
+    this.debouncedUpdate();
   };
 
   hideLinkToolbar = () => {
@@ -81,6 +81,10 @@ export default class Toolbar extends React.Component<Props, State> {
     const link = getLinkInSelection(this.props.value);
     this.setState({ link });
   };
+
+  debouncedUpdate = debounce(() => {
+    this.update();
+  }, 200);
 
   update = () => {
     const { value } = this.props;
@@ -170,11 +174,11 @@ export default class Toolbar extends React.Component<Props, State> {
               onBlur={this.hideLinkToolbar}
             />
           ) : (
-            <FormattingToolbar
-              onCreateLink={this.showLinkToolbar}
-              {...this.props}
-            />
-          )}
+              <FormattingToolbar
+                onCreateLink={this.showLinkToolbar}
+                {...this.props}
+              />
+            )}
         </Menu>
       </Portal>
     );
