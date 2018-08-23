@@ -84,19 +84,6 @@ const Anchor = styled(CopyToClipboard)`
 
 export const StyledHeading = styled(Heading)`
   position: relative;
-
-  &:hover {
-    ${Anchor} {
-      color: ${props => props.theme.placeholder};
-      visibility: visible;
-      text-decoration: none;
-      cursor: pointer;
-
-      &:hover {
-        color: ${props => props.theme.text};
-      }
-    }
-  }
 `;
 export const Heading1 = (props: SlateNodeProps) => (
   <StyledHeading component="h1" {...props} />
