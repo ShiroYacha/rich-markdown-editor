@@ -34,7 +34,12 @@ class Image extends React.Component<Props, State> {
     const { attributes, editor, node, readOnly } = this.props;
     const loading = node.data.get("loading");
     const caption = node.data.get("alt") || "";
-    const src = node.data.get("src");
+    var src = node.data.get("src");
+    // hack for firebase storage links
+    if (src.includes("firebasestorage.googleapis.com")) {
+      var subSrc = src.substr(src.indexOf("images"), src.length - 1);
+      src = src.replace(subSrc, subSrc.replace(/\//g, "%2F"));
+    }
     const error = node.data.get("error");
     const active =
       editor.value.isFocused && editor.value.selection.hasEdgeIn(node);
