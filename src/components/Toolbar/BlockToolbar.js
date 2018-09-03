@@ -210,7 +210,7 @@ class BlockToolbar extends React.Component<Props> {
         <Separator />
         {blockToolbarPlugins &&
           blockToolbarPlugins.map((p, index) =>
-            this.renderPluginBlockButton(p.block, p.icon, index)
+            this.renderPluginBlockButton(p.blockGenerator(), p.icon, index)
           )}
       </Bar>
     );
