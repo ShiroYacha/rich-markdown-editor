@@ -2,6 +2,7 @@
 import * as React from "react";
 import { findDOMNode } from "react-dom";
 import keydown from "react-keydown";
+import { Data } from "slate";
 import styled, { withTheme } from "styled-components";
 import {
   Heading1Icon,
@@ -126,7 +127,7 @@ class BlockToolbar extends React.Component<Props> {
     }
   };
 
-  handleClickPluginBlock = (ev: SyntheticEvent<*>, block: any) => {
+  handleClickPluginBlock = (ev: SyntheticEvent<*>, block: Object) => {
     ev.preventDefault();
     return this.insertBlock(block);
   };
@@ -162,19 +163,29 @@ class BlockToolbar extends React.Component<Props> {
     );
   };
 
-  renderPluginBlockButton = (block: any, icon: any, key: any) => {
+  renderPluginBlockButton = (
+    type: string,
+    dataCallback: Function,
+    icon: any,
+    key: any
+  ) => {
     const { hiddenToolbarButtons } = this.props.theme;
     if (
       hiddenToolbarButtons &&
       hiddenToolbarButtons.blocks &&
-      hiddenToolbarButtons.blocks.includes(block)
+      hiddenToolbarButtons.blocks.includes(type)
     )
       return null;
 
     return (
       <ToolbarButton
         key={key}
-        onMouseDown={ev => this.handleClickPluginBlock(ev, block)}
+        onMouseDown={ev =>
+          this.handleClickPluginBlock(ev, {
+            type: type,
+            data: Data.fromJSON(dataCallback()),
+          })
+        }
       >
         {icon}
       </ToolbarButton>
@@ -210,7 +221,12 @@ class BlockToolbar extends React.Component<Props> {
         <Separator />
         {blockToolbarPlugins &&
           blockToolbarPlugins.map((p, index) =>
-            this.renderPluginBlockButton(p.blockGenerator(), p.icon, index)
+            this.renderPluginBlockButton(
+              p.type,
+              p.dataCallback,
+              p.icon,
+              index
+            )
           )}
       </Bar>
     );
