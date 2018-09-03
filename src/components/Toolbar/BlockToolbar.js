@@ -126,6 +126,11 @@ class BlockToolbar extends React.Component<Props> {
     }
   };
 
+  handleClickPluginBlock = (ev: SyntheticEvent<*>, block: any) => {
+    ev.preventDefault();
+    return this.insertBlock(block);
+  };
+
   onPickImage = () => {
     // simulate a click on the file upload input element
     this.file.click();
@@ -157,8 +162,27 @@ class BlockToolbar extends React.Component<Props> {
     );
   };
 
+  renderPluginBlockButton = (block: any, icon: any, key: any) => {
+    const { hiddenToolbarButtons } = this.props.theme;
+    if (
+      hiddenToolbarButtons &&
+      hiddenToolbarButtons.blocks &&
+      hiddenToolbarButtons.blocks.includes(block)
+    )
+      return null;
+
+    return (
+      <ToolbarButton
+        key={key}
+        onMouseDown={ev => this.handleClickPluginBlock(ev, block)}
+      >
+        {icon}
+      </ToolbarButton>
+    );
+  };
+
   render() {
-    const { editor, attributes, node } = this.props;
+    const { editor, attributes, node, blockToolbarPlugins } = this.props;
     const hasImageUpload = !!editor.props.uploadImage;
 
     const active =
@@ -183,6 +207,11 @@ class BlockToolbar extends React.Component<Props> {
         {this.renderBlockButton("code", CodeIcon)}
         {this.renderBlockButton("horizontal-rule", HorizontalRuleIcon)}
         {hasImageUpload && this.renderBlockButton("image", ImageIcon)}
+        <Separator />
+        {blockToolbarPlugins &&
+          blockToolbarPlugins.map((p, index) =>
+            this.renderPluginBlockButton(p.block, p.icon, index)
+          )}
       </Bar>
     );
   }

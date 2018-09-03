@@ -13,6 +13,13 @@ This is example content. It is persisted between reloads in localStorage.
 `;
 const defaultValue = savedText || exampleText;
 class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
+  blockToolbarPlugins = [
+    {
+      block: { type: "block-quote" },
+      icon: <span>></span>,
+    },
+  ];
+
   state = {
     readOnly: false,
     dark: false,
@@ -44,6 +51,7 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
         <Editor
           readOnly={this.state.readOnly}
           defaultValue={defaultValue}
+          blockToolbarPlugins={this.blockToolbarPlugins}
           onSave={options => console.log("Save triggered", options)}
           onCancel={() => console.log("Cancel triggered")}
           onChange={this.handleChange}

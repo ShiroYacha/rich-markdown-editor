@@ -28,6 +28,7 @@ type Props = {
   placeholder: string,
   pretitle?: string,
   plugins?: Plugin[],
+  blockToolbarPlugins?: any[],
   autoFocus?: boolean,
   readOnly?: boolean,
   toc?: boolean,
@@ -69,6 +70,8 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
 
   constructor(props: Props) {
     super(props);
+
+    this.blockToolbarPlugins = this.props.blockToolbarPlugins;
 
     this.plugins = createPlugins();
     if (props.plugins) {
@@ -214,8 +217,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   renderNode = (props: SlateNodeProps) => {
     const node = this.props.renderNode && this.props.renderNode(props);
     if (node) return node;
-
-    return renderNode(props);
+    return renderNode(props, this.blockToolbarPlugins);
   };
 
   renderPlaceholder = (props: SlateNodeProps) => {
