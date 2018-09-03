@@ -18,14 +18,14 @@ import {
 import Paragraph from "./components/Paragraph";
 import type { SlateNodeProps } from "./types";
 
-function renderNode(props: SlateNodeProps) {
+function renderNode(props: SlateNodeProps, blockToolbarPlugins) {
   const { attributes } = props;
-
+  const propsWithPlugins = { ...props, blockToolbarPlugins };
   switch (props.node.type) {
     case "paragraph":
       return <Paragraph {...props} />;
     case "block-toolbar":
-      return <BlockToolbar {...props} />;
+      return <BlockToolbar {...propsWithPlugins} />;
     case "block-quote":
       return <blockquote {...attributes}>{props.children}</blockquote>;
     case "bulleted-list":

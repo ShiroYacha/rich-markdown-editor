@@ -29,6 +29,7 @@ type Props = {
   placeholder: string,
   pretitle?: string,
   plugins?: Plugin[],
+  blockToolbarPlugins?: any[],
   autoFocus?: boolean,
   readOnly?: boolean,
   toc?: boolean,
@@ -53,7 +54,6 @@ type Props = {
 type State = {
   editorValue: Value,
   editorLoaded: boolean,
-  schema: Schema,
 };
 
 class RichMarkdownEditor extends React.PureComponent<Props, State> {
@@ -66,9 +66,13 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
 
   editor: Editor;
   plugins: Plugin[];
+  prevSchema: ?Schema = null;
+  schema: ?Schema = null;
 
   constructor(props: Props) {
     super(props);
+
+    this.blockToolbarPlugins = this.props.blockToolbarPlugins;
 
     this.plugins = createPlugins();
     if (props.plugins) {
@@ -81,10 +85,6 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     this.state = {
       editorLoaded: false,
       editorValue: Markdown.deserialize(props.defaultValue),
-      schema: {
-        ...defaultSchema,
-        ...this.props.schema,
-      },
     };
   }
 
@@ -234,8 +234,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   renderNode = (props: SlateNodeProps) => {
     const node = this.props.renderNode && this.props.renderNode(props);
     if (node) return node;
-
-    return renderNode(props);
+    return renderNode(props, this.blockToolbarPlugins);
   };
 
   renderPlaceholder = (props: SlateNodeProps) => {
@@ -256,6 +255,17 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
         {editor.props.readOnly ? "" : editor.props.placeholder}
       </Placeholder>
     );
+  };
+
+  getSchema = () => {
+    if (this.prevSchema !== this.props.schema) {
+      this.schema = {
+        ...defaultSchema,
+        ...(this.props.schema || {}),
+      };
+      this.prevSchema = this.props.schema;
+    }
+    return this.schema;
   };
 
   render = () => {
@@ -314,7 +324,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
               renderPlaceholder={this.renderPlaceholder}
               renderNode={this.renderNode}
               renderMark={renderMark}
-              schema={this.state.schema}
+              schema={this.getSchema()}
               onKeyDown={this.handleKeyDown}
               onChange={this.handleChange}
               onSave={onSave}

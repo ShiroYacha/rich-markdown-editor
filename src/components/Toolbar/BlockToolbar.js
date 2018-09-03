@@ -16,14 +16,14 @@ import {
 } from "outline-icons";
 import getDataTransferFiles from "../../lib/getDataTransferFiles";
 import Flex from "../Flex";
-import type { SlateNodeProps } from "../../types";
+import type { SlateNodeProps, Theme } from "../../types";
 
 import { fadeIn } from "../../animations";
 import { splitAndInsertBlock, insertImageFile } from "../../changes";
 import ToolbarButton from "./ToolbarButton";
 
 type Props = SlateNodeProps & {
-  theme: Object,
+  theme: Theme,
 };
 
 type Options = {
@@ -126,6 +126,11 @@ class BlockToolbar extends React.Component<Props> {
     }
   };
 
+  handleClickPluginBlock = (ev: SyntheticEvent<*>, block: any) => {
+    ev.preventDefault();
+    return this.insertBlock(block);
+  };
+
   onPickImage = () => {
     // simulate a click on the file upload input element
     this.file.click();
@@ -142,6 +147,14 @@ class BlockToolbar extends React.Component<Props> {
   };
 
   renderBlockButton = (type: string, IconClass: Function) => {
+    const { hiddenToolbarButtons } = this.props.theme;
+    if (
+      hiddenToolbarButtons &&
+      hiddenToolbarButtons.blocks &&
+      hiddenToolbarButtons.blocks.includes(type)
+    )
+      return null;
+
     return (
       <ToolbarButton onMouseDown={ev => this.handleClickBlock(ev, type)}>
         <IconClass color={this.props.theme.blockToolbarItem} />
@@ -149,8 +162,27 @@ class BlockToolbar extends React.Component<Props> {
     );
   };
 
+  renderPluginBlockButton = (block: any, icon: any, key: any) => {
+    const { hiddenToolbarButtons } = this.props.theme;
+    if (
+      hiddenToolbarButtons &&
+      hiddenToolbarButtons.blocks &&
+      hiddenToolbarButtons.blocks.includes(block)
+    )
+      return null;
+
+    return (
+      <ToolbarButton
+        key={key}
+        onMouseDown={ev => this.handleClickPluginBlock(ev, block)}
+      >
+        {icon}
+      </ToolbarButton>
+    );
+  };
+
   render() {
-    const { editor, attributes, node } = this.props;
+    const { editor, attributes, node, blockToolbarPlugins } = this.props;
     const hasImageUpload = !!editor.props.uploadImage;
 
     const active =
@@ -175,6 +207,11 @@ class BlockToolbar extends React.Component<Props> {
         {this.renderBlockButton("code", CodeIcon)}
         {this.renderBlockButton("horizontal-rule", HorizontalRuleIcon)}
         {hasImageUpload && this.renderBlockButton("image", ImageIcon)}
+        <Separator />
+        {blockToolbarPlugins &&
+          blockToolbarPlugins.map((p, index) =>
+            this.renderPluginBlockButton(p.block, p.icon, index)
+          )}
       </Bar>
     );
   }
