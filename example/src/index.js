@@ -15,7 +15,9 @@ const defaultValue = savedText || exampleText;
 class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
   blockToolbarPlugins = [
     {
-      block: { type: "block-quote" },
+      blockGenerator: () => {
+        return { type: "block-quote" };
+      },
       icon: <span>></span>,
     },
   ];
