@@ -17,6 +17,9 @@ const schema = {
     "block-toolbar": {
       isVoid: true,
     },
+    richcontrol: {
+      isVoid: true,
+    },
   },
   document: {
     nodes: [
@@ -38,6 +41,7 @@ const schema = {
           "todo-list",
           "block-toolbar",
           "table",
+          "richcontrol",
         ],
         min: 1,
       },
