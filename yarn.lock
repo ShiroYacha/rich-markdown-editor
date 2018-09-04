@@ -5602,7 +5602,7 @@ slate-edit-list@^0.11.3:
 
 "slate-md-serializer@https://github.com/ShiroYacha/slate-md-serializer.git#hive":
   version "4.1.0"
-  resolved "https://github.com/ShiroYacha/slate-md-serializer.git#a441160104bdb60a39ec159fcddf355a10f66db6"
+  resolved "https://github.com/ShiroYacha/slate-md-serializer.git#1a7d71be1e51b1cab23746311640a58bb91547cf"
 
 slate-paste-linkify@^0.5.1:
   version "0.5.1"

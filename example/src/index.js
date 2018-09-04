@@ -40,6 +40,16 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
     localStorage.setItem("saved", value());
   }, 250);
 
+  handleRenderNode = props => {
+    const { node, attributes } = props;
+    switch (node.type) {
+      case "richcontrol":
+        return <strong {...attributes}>(rich control)</strong>;
+      default:
+        return;
+    }
+  };
+
   render() {
     return (
       <div style={{ marginTop: "60px" }}>
@@ -55,6 +65,7 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
           readOnly={this.state.readOnly}
           defaultValue={defaultValue}
           blockToolbarPlugins={this.blockToolbarPlugins}
+          renderNode={this.handleRenderNode}
           onSave={options => console.log("Save triggered", options)}
           onCancel={() => console.log("Cancel triggered")}
           onChange={this.handleChange}
