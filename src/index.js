@@ -34,6 +34,7 @@ type Props = {
   dark?: boolean,
   schema?: Schema,
   theme?: Object,
+  serializer?: Object,
   uploadImage?: (file: File) => Promise<string>,
   onSave?: ({ done?: boolean }) => *,
   onCancel?: () => *,
@@ -70,6 +71,8 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    this.serializer = props.serializer ? props.serializer : Markdown;
+
     this.plugins = createPlugins();
     if (props.plugins) {
       if (Array.isArray(props.plugins)) {
@@ -80,7 +83,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     }
     this.state = {
       editorLoaded: false,
-      editorValue: Markdown.deserialize(props.defaultValue),
+      editorValue: this.serializer.deserialize(props.defaultValue),
     };
   }
 
@@ -110,7 +113,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
   };
 
   value = (): string => {
-    return Markdown.serialize(this.state.editorValue);
+    return this.serializer.serialize(this.state.editorValue);
   };
 
   handleChange = (change: Change) => {
