@@ -90,6 +90,25 @@ class BlockToolbar extends React.Component<Props> {
     });
   };
 
+  insertPluginBlock = (
+    block: Object,
+    cursorPosition: "before" | "on" | "after" = "on"
+  ) => {
+    const { editor } = this.props;
+
+    editor.change(change => {
+      change
+        .collapseToEndOf(this.props.node)
+        .insertBlock(block)
+        .removeNodeByKey(this.props.node.key)
+        .collapseToEnd();
+
+      if (cursorPosition === "before") change.collapseToStartOfPreviousBlock();
+      if (cursorPosition === "after") change.collapseToStartOfNextBlock();
+      return change.focus();
+    });
+  };
+
   handleClickBlock = (ev: SyntheticEvent<*>, type: string) => {
     ev.preventDefault();
 
@@ -129,7 +148,7 @@ class BlockToolbar extends React.Component<Props> {
 
   handleClickPluginBlock = (ev: SyntheticEvent<*>, block: Object) => {
     ev.preventDefault();
-    return this.insertBlock(block);
+    return this.insertPluginBlock(block);
   };
 
   onPickImage = () => {
@@ -221,12 +240,7 @@ class BlockToolbar extends React.Component<Props> {
         <Separator />
         {blockToolbarPlugins &&
           blockToolbarPlugins.map((p, index) =>
-            this.renderPluginBlockButton(
-              p.type,
-              p.dataCallback,
-              p.icon,
-              index
-            )
+            this.renderPluginBlockButton(p.type, p.dataCallback, p.icon, index)
           )}
       </Bar>
     );
