@@ -239,8 +239,18 @@ class BlockToolbar extends React.Component<Props> {
         {hasImageUpload && this.renderBlockButton("image", ImageIcon)}
         <Separator />
         {blockToolbarPlugins &&
-          blockToolbarPlugins.map((p, index) =>
-            this.renderPluginBlockButton(p.type, p.dataCallback, p.icon, index)
+          blockToolbarPlugins.map(
+            (p, index) =>
+              p.isSeparator ? (
+                <Separator />
+              ) : (
+                this.renderPluginBlockButton(
+                  p.type,
+                  p.dataCallback,
+                  p.icon,
+                  index
+                )
+              )
           )}
       </Bar>
     );
