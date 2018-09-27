@@ -247,7 +247,6 @@ class BlockToolbar extends React.Component<Props> {
         {this.renderBlockButton("code", CodeIcon)}
         {this.renderBlockButton("horizontal-rule", HorizontalRuleIcon)}
         {hasImageUpload && this.renderBlockButton("image", ImageIcon)}
-        <Separator />
         {blockToolbarPlugins &&
           blockToolbarPlugins.map(
             (p, index) =>
