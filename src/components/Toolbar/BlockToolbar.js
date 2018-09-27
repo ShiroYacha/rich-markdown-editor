@@ -147,7 +147,9 @@ class BlockToolbar extends React.Component<Props> {
   };
 
   handleClickPluginBlock = (ev: SyntheticEvent<*>, block: Object) => {
-    ev.preventDefault();
+    if (ev) {
+      ev.preventDefault();
+    }
     return this.insertPluginBlock(block);
   };
 
@@ -185,6 +187,7 @@ class BlockToolbar extends React.Component<Props> {
   renderPluginBlockButton = (
     type: string,
     dataCallback: Function,
+    customTriggerCallback: Function,
     icon: any,
     key: any
   ) => {
@@ -200,10 +203,17 @@ class BlockToolbar extends React.Component<Props> {
       <ToolbarButton
         key={key}
         onMouseDown={ev =>
-          this.handleClickPluginBlock(ev, {
-            type: type,
-            data: Data.fromJSON(dataCallback()),
-          })
+          customTriggerCallback
+            ? customTriggerCallback(() => {
+                this.handleClickPluginBlock(null, {
+                  type: type,
+                  data: Data.fromJSON(dataCallback()),
+                });
+              })
+            : this.handleClickPluginBlock(ev, {
+                type: type,
+                data: Data.fromJSON(dataCallback()),
+              })
         }
       >
         {icon}
@@ -247,6 +257,7 @@ class BlockToolbar extends React.Component<Props> {
                 this.renderPluginBlockButton(
                   p.type,
                   p.dataCallback,
+                  p.customTriggerCallback,
                   p.icon,
                   index
                 )
