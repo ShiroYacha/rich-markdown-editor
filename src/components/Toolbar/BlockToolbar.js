@@ -188,7 +188,7 @@ class BlockToolbar extends React.Component<Props> {
     type: string,
     dataCallback: Function,
     customTriggerCallback: Function,
-    icon: any,
+    iconCallback: Function,
     key: any
   ) => {
     const { hiddenToolbarButtons } = this.props.theme;
@@ -209,14 +209,14 @@ class BlockToolbar extends React.Component<Props> {
                   type: type,
                   data: Data.fromJSON(dataCallback()),
                 });
-              })
+              }, this.forceUpdate)
             : this.handleClickPluginBlock(ev, {
                 type: type,
                 data: Data.fromJSON(dataCallback()),
               })
         }
       >
-        {icon}
+        {iconCallback()}
       </ToolbarButton>
     );
   };
