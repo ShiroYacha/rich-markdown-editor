@@ -204,12 +204,15 @@ class BlockToolbar extends React.Component<Props> {
         key={key}
         onMouseDown={ev =>
           customTriggerCallback
-            ? customTriggerCallback(() => {
-                this.handleClickPluginBlock(null, {
-                  type: type,
-                  data: Data.fromJSON(dataCallback()),
-                });
-              }, this.forceUpdate)
+            ? customTriggerCallback(
+                () => {
+                  this.handleClickPluginBlock(null, {
+                    type: type,
+                    data: Data.fromJSON(dataCallback()),
+                  });
+                },
+                () => this.forceUpdate()
+              )
             : this.handleClickPluginBlock(ev, {
                 type: type,
                 data: Data.fromJSON(dataCallback()),
