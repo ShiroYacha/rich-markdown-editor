@@ -140,7 +140,7 @@ class BlockInsert extends React.Component<Props, State> {
 
 const Trigger = styled.div`
   position: absolute;
-  z-index: 1;
+  z-index: 99999999;
   opacity: 0;
   background-color: ${props => props.theme.background};
   transition: opacity 150ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
