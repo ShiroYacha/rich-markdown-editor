@@ -206,10 +206,12 @@ class BlockToolbar extends React.Component<Props> {
           customTriggerCallback
             ? customTriggerCallback(
                 () => {
+                  const data = dataCallback();
                   this.handleClickPluginBlock(null, {
                     type: type,
-                    data: Data.fromJSON(dataCallback()),
+                    data: Data.fromJSON(data),
                   });
+                  return data;
                 },
                 () => this.forceUpdate()
               )
