@@ -178,7 +178,7 @@ class BlockToolbar extends React.Component<Props> {
       return null;
 
     return (
-      <ToolbarButton onMouseDown={ev => this.handleClickBlock(ev, type)}>
+      <ToolbarButton onMouseDown={ev => this.handleClickBlock(ev, type)} title={type}>
         <IconClass color={this.props.theme.blockToolbarItem} />
       </ToolbarButton>
     );
@@ -186,6 +186,7 @@ class BlockToolbar extends React.Component<Props> {
 
   renderPluginBlockButton = (
     type: string,
+    displayType: string,
     dataCallback: Function,
     customTriggerCallback: Function,
     iconCallback: Function,
@@ -202,6 +203,7 @@ class BlockToolbar extends React.Component<Props> {
     return (
       <ToolbarButton
         key={key}
+        title={displayType || type}
         onMouseDown={ev =>
           customTriggerCallback
             ? customTriggerCallback(
@@ -260,6 +262,7 @@ class BlockToolbar extends React.Component<Props> {
               ) : (
                 this.renderPluginBlockButton(
                   p.type,
+                  p.displayType,
                   p.dataCallback,
                   p.customTriggerCallback,
                   p.icon,
