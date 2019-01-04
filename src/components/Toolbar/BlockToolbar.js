@@ -212,7 +212,6 @@ class BlockToolbar extends React.Component<Props> {
                   this.handleClickPluginBlock(null, {
                     type: type,
                     data: Data.fromJSON(data),
-                    isVoid: true
                   });
                   return data;
                 },
@@ -221,7 +220,6 @@ class BlockToolbar extends React.Component<Props> {
             : this.handleClickPluginBlock(ev, {
                 type: type,
                 data: Data.fromJSON(dataCallback()),
-                isVoid: true
               })
         }
       >
