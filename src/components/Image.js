@@ -31,7 +31,7 @@ class Image extends React.Component<Props, State> {
   };
 
   render() {
-    const { attributes, node, isSelected, readOnly } = this.props;
+    const { attributes, node, isSelected, readOnly, editor } = this.props;
     const loading = node.data.get("loading");
     const caption = node.data.get("alt") || "";
     var src = node.data.get("src");
