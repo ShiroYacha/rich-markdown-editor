@@ -185,6 +185,7 @@ class BlockToolbar extends React.Component<Props> {
 
   renderPluginBlockButton = (
     type: string,
+    isVoid: any,
     displayType: string,
     dataCallback: Function,
     customTriggerCallback: Function,
@@ -206,20 +207,22 @@ class BlockToolbar extends React.Component<Props> {
         onMouseDown={ev =>
           customTriggerCallback
             ? customTriggerCallback(
-                () => {
-                  const data = dataCallback();
-                  this.handleClickPluginBlock(null, {
-                    type: type,
-                    data: Data.fromJSON(data),
-                  });
-                  return data;
-                },
-                () => this.forceUpdate()
-              )
+              () => {
+                const data = dataCallback();
+                this.handleClickPluginBlock(null, {
+                  type: type,
+                  data: Data.fromJSON(data),
+                  isVoid: isVoid ? true : false
+                });
+                return data;
+              },
+              () => this.forceUpdate()
+            )
             : this.handleClickPluginBlock(ev, {
-                type: type,
-                data: Data.fromJSON(dataCallback()),
-              })
+              type: type,
+              isVoid: isVoid ? true : false,
+              data: Data.fromJSON(dataCallback()),
+            })
         }
       >
         {iconCallback()}
@@ -256,15 +259,16 @@ class BlockToolbar extends React.Component<Props> {
               p.isSeparator ? (
                 <Separator />
               ) : (
-                this.renderPluginBlockButton(
-                  p.type,
-                  p.displayType,
-                  p.dataCallback,
-                  p.customTriggerCallback,
-                  p.icon,
-                  index
+                  this.renderPluginBlockButton(
+                    p.type,
+                    p.isVoid,
+                    p.displayType,
+                    p.dataCallback,
+                    p.customTriggerCallback,
+                    p.icon,
+                    index
+                  )
                 )
-              )
           )}
       </Bar>
     );
