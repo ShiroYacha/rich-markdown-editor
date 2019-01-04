@@ -31,7 +31,7 @@ class Image extends React.Component<Props, State> {
   };
 
   render() {
-    const { attributes, editor, node, readOnly } = this.props;
+    const { attributes, node, isSelected, readOnly } = this.props;
     const loading = node.data.get("loading");
     const caption = node.data.get("alt") || "";
     var src = node.data.get("src");
@@ -49,8 +49,8 @@ class Image extends React.Component<Props, State> {
       <CenteredImage contentEditable={false}>
         {this.state.hasError ? (
           <React.Fragment>
-            <StyledImg width={200} height={100} active={active} />
-            <Error>Could not load image.</Error>
+            <ErrorImg as="div" isSelected={isSelected} />
+            <ErrorMessage>Could not load image</ErrorMessage>
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -60,7 +60,7 @@ class Image extends React.Component<Props, State> {
                 {...attributes}
                 src={src}
                 alt={caption}
-                active={active}
+                isSelected={isSelected}
                 loading={loading}
               />
             ) : (
@@ -88,9 +88,6 @@ class Image extends React.Component<Props, State> {
                 tabIndex={-1}
               />
             )}
-            {error && (
-              <Error>Sorry, an error occurred uploading the image.</Error>
-            )}
           </React.Fragment>
         )}
       </CenteredImage>
@@ -98,18 +95,15 @@ class Image extends React.Component<Props, State> {
   }
 }
 
-const HiddenImg = styled.img`
-  display: none;
-`;
-
-const Error = styled.div`
+const ErrorMessage = styled.div`
   position: absolute;
   text-align: center;
   transform: translate3d(-50%, -50%, 0);
   top: 50%;
   left: 50%;
 
-  background: rgba(255, 255, 255, 0.5);
+  color: ${props => props.theme.text};
+  background: ${props => props.theme.imageErrorBackground};
   display: block;
   margin: 0 auto;
   padding: 4px 8px;
@@ -117,12 +111,22 @@ const Error = styled.div`
   font-size: 14px;
 `;
 
+const HiddenImg = styled.img`
+  display: none;
+`;
+
 const StyledImg = styled.img`
   max-width: 100%;
   box-shadow: ${props =>
-    props.active ? `0 0 0 2px ${props.theme.selected}` : "none"};
-  border-radius: ${props => (props.active ? `2px` : "0")};
+    props.isSelected ? `0 0 0 2px ${props.theme.selected}` : "none"};
+  border-radius: ${props => (props.isSelected ? `2px` : "0")};
   opacity: ${props => (props.loading ? 0.5 : 1)};
+`;
+
+const ErrorImg = styled(StyledImg)`
+  width: 200px;
+  height: 100px;
+  margin: 0 auto;
 `;
 
 const CenteredImage = styled.span`

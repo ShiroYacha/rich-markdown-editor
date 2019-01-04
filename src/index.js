@@ -1,6 +1,6 @@
 // @flow
 import * as React from "react";
-import { Value, Change, Schema, Text } from "slate";
+import { Value, Change, Schema, Text, Node } from "slate";
 import { Editor } from "slate-react";
 import styled, { ThemeProvider } from "styled-components";
 import type { SlateNodeProps, Plugin, SearchResult } from "./types";
@@ -48,6 +48,7 @@ type Props = {
   onShowToast?: (message: string) => *,
   renderNode?: SlateNodeProps => ?React.Node,
   renderPlaceholder?: SlateNodeProps => ?React.Node,
+  getLinkComponent?: Node => ?React.ComponentType<*>,
   className?: string,
   style?: Object,
 };
@@ -76,7 +77,9 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
     this.blockToolbarPlugins = this.props.blockToolbarPlugins;
     this.serializer = props.serializer ? props.serializer : Markdown;
 
-    this.plugins = createPlugins();
+    this.plugins = createPlugins({
+      getLinkComponent: props.getLinkComponent,
+    });
     if (props.plugins) {
       if (Array.isArray(props.plugins)) {
         this.plugins = props.plugins.concat(this.plugins);
@@ -319,7 +322,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
                 />
               )}
             <StyledEditor
-              innerRef={this.setEditorRef}
+              ref={this.setEditorRef}
               plugins={this.plugins}
               value={this.state.editorValue}
               placeholder={placeholder}

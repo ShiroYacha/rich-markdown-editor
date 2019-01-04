@@ -16,7 +16,6 @@ import {
   TodoListIcon,
 } from "outline-icons";
 import getDataTransferFiles from "../../lib/getDataTransferFiles";
-import Flex from "../Flex";
 import type { SlateNodeProps, Theme } from "../../types";
 
 import { fadeIn } from "../../animations";
@@ -33,8 +32,8 @@ type Options = {
 };
 
 class BlockToolbar extends React.Component<Props> {
-  bar: HTMLDivElement;
-  file: HTMLInputElement;
+  bar: ?HTMLDivElement;
+  file: ?HTMLInputElement;
 
   componentDidMount() {
     window.addEventListener("click", this.handleOutsideMouseClick);
@@ -155,7 +154,7 @@ class BlockToolbar extends React.Component<Props> {
 
   onPickImage = () => {
     // simulate a click on the file upload input element
-    this.file.click();
+    if (this.file) this.file.click();
   };
 
   onImagePicked = async (ev: SyntheticInputEvent<*>) => {
@@ -232,14 +231,11 @@ class BlockToolbar extends React.Component<Props> {
     const { editor, attributes, node, blockToolbarPlugins } = this.props;
     const hasImageUpload = !!editor.props.uploadImage;
 
-    const active =
-      editor.value.isFocused && editor.value.selection.hasEdgeIn(node);
-
     return (
-      <Bar active={active} {...attributes} ref={ref => (this.bar = ref)}>
+      <Bar {...attributes} ref={ref => (this.bar = ref)}>
         <HiddenInput
           type="file"
-          innerRef={ref => (this.file = ref)}
+          ref={ref => (this.file = ref)}
           onChange={this.onImagePicked}
           accept="image/*"
         />
@@ -283,7 +279,8 @@ const Separator = styled.div`
   margin-left: 10px;
 `;
 
-const Bar = styled(Flex)`
+const Bar = styled.div`
+  display: flex;
   z-index: 100;
   animation: ${fadeIn} 150ms ease-in-out;
   position: relative;

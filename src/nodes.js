@@ -67,6 +67,7 @@ function renderNode(props: SlateNodeProps, blockToolbarPlugins) {
     case "heading6":
       return <Heading6 {...props} />;
     default:
+      return props.children;
   }
 }
 
