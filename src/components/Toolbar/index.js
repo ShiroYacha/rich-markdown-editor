@@ -45,7 +45,7 @@ export default class Toolbar extends React.Component<Props, State> {
     left: "",
   };
 
-  menu: ?HTMLElement;
+  menu: HTMLElement;
 
   componentDidMount = () => {
     this.update();
@@ -142,7 +142,7 @@ export default class Toolbar extends React.Component<Props, State> {
       rect = range.getBoundingClientRect();
     }
 
-    if (!rect || !this.menu || (rect.top === 0 && rect.left === 0)) {
+    if (!rect || (rect.top === 0 && rect.left === 0)) {
       return;
     }
 
@@ -158,6 +158,10 @@ export default class Toolbar extends React.Component<Props, State> {
     }
   };
 
+  setRef = (ref: HTMLElement) => {
+    this.menu = ref;
+  };
+
   render() {
     const style = {
       top: this.state.top,
@@ -166,11 +170,7 @@ export default class Toolbar extends React.Component<Props, State> {
 
     return (
       <Portal>
-        <Menu
-          active={this.state.active}
-          ref={ref => (this.menu = ref)}
-          style={style}
-        >
+        <Menu active={this.state.active} innerRef={this.setRef} style={style}>
           {this.state.link ? (
             <LinkToolbar
               {...this.props}
