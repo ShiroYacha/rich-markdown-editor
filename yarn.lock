@@ -5759,6 +5759,10 @@ slate-react@^0.21.15:
     tiny-invariant "^1.0.1"
     tiny-warning "^0.0.3"
 
+slate-schema-violations@^0.1.39:
+  version "0.1.39"
+  resolved "https://registry.yarnpkg.com/slate-schema-violations/-/slate-schema-violations-0.1.39.tgz#854ab5624136419cef4c803b1823acabe11f1c15"
+
 slate-trailing-block@^0.5.0:
   version "0.5.0"
   resolved "http://registry.npmjs.org/slate-trailing-block/-/slate-trailing-block-0.5.0.tgz#cedb4f2975f1167e0fb9d259ce1252b82f4d74ff"
