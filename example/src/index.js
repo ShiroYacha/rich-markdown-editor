@@ -24,10 +24,11 @@ class Example extends React.Component<*, { readOnly: boolean, dark: boolean }> {
   blockToolbarPlugins = [
     {
       type: "richcontrol",
+      displayType: "task list",
       dataCallback: () => {
         return { dataTitle: "dataContent" };
       },
-      icon: <span>></span>,
+      icon: () => "test",
     },
   ];
 
